@@ -1,0 +1,106 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+		<title>Setup :: Damn Vulnerable Web Application (DVWA) v1.9</title>
+
+		<link rel="stylesheet" type="text/css" href="dvwa/css/main.css" />
+
+		<link rel="icon" type="\image/ico" href="favicon.ico" />
+
+		<script type="text/javascript" src="dvwa/js/dvwaPage.js"></script>
+
+	</head>
+
+	<body class="home">
+		<div id="container">
+
+			<div id="header">
+
+				<img src="dvwa/images/logo.png" alt="Damn Vulnerable Web Application" />
+
+			</div>
+
+			<div id="main_menu">
+
+				<div id="main_menu_padded">
+				<ul class="menuBlocks"><li onclick="window.location='setup.php'" class="selected"><a href="setup.php">Setup DVWA</a></li>
+<li onclick="window.location='instructions.php'" class=""><a href="instructions.php">Instructions</a></li>
+</ul><ul class="menuBlocks"><li onclick="window.location='about.php'" class=""><a href="about.php">About</a></li>
+</ul>
+				</div>
+
+			</div>
+
+			<div id="main_body">
+
+				
+<div class="body_padded">
+	<h1>Database Setup <img src="dvwa/images/spanner.png" /></h1>
+
+	<p>Click on the 'Create / Reset Database' button below to create or reset your database.</br>
+	If you get an error make sure you have the correct user credentials in: <em>/app/config/config.inc.php</em></p>
+
+	<p>If the database already exists, <em>it will be cleared and the data will be reset</em>.<br />
+	You can also use this to reset the administrator credentials ("<em>admin</em> // <em>password</em>") at any stage.</p>
+	<hr />
+	<br />
+
+	<h2>Setup Check</h2>
+
+	Operating system: <em>*nix</em><br />
+	Backend database: <em>MySQL</em><br />
+	PHP version: <em>5.5.9-1ubuntu4.25</em><br />
+	<br />
+	Web Server SERVER_NAME: <em>172.17.0.1</em><br />
+	<br />
+	PHP function display_errors: <em>Disabled</em><br />
+	PHP function safe_mode: <span class="success">Disabled</span><br/ >
+	PHP function allow_url_include: <span class="success">Enabled</span><br/ >
+	PHP function allow_url_fopen: <span class="success">Enabled</span><br />
+	PHP function magic_quotes_gpc: <span class="success">Disabled</span><br />
+	PHP module php-gd: <span class="success">Installed</span><br />
+	<br />
+	reCAPTCHA key: <span class="failure">Missing</span><br />
+	<br />
+	Writable folder /app/hackable/uploads/: <span class="success">Yes)</span><br />
+	Writable file /app/external/phpids/0.6/lib/IDS/tmp/phpids_log.txt: <span class="success">Yes</span><br />
+	<br />
+	<i><span class="failure">Status in red</span>, indicate there will be an issue when trying to complete some modules.</i><br />
+	<br /><br /><br />
+
+	<!-- Create db button -->
+	<form action="#" method="post">
+		<input name="create_db" type="submit" value="Create / Reset Database">
+		<input type='hidden' name='user_token' value='8a2592d5c4c346f8257957ccf8fc38b4' />
+	</form>
+	<br />
+	<hr />
+</div>
+				<br /><br />
+				<div class="body_padded"><div class="message">Unable to connect to the database.<br /></div></div>
+
+			</div>
+
+			<div class="clear">
+			</div>
+
+			<div id="system_info">
+				
+			</div>
+
+			<div id="footer">
+
+				<p>Damn Vulnerable Web Application (DVWA) v1.9</p>
+
+			</div>
+
+		</div>
+
+	</body>
+
+</html>
