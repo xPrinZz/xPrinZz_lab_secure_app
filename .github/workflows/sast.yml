@@ -4,26 +4,26 @@ jobs:
  name: Mixeway Scanning
  runs-on: ubuntu-latest
  steps:
- - uses: actions/checkout@v1
- - name: Prepare variables
- id: vars
- shell: bash
- run: |
- echo "##[set-output name=branch;]: $(echo ${GITHUB_REF#refs/heads/})"
- echo "::set-output name=sha_short::$(git rev-parse HEAD)"
- - name: Prepare Mixeway docker image
- run: |
- docker pull mixeway/scanner:latest
- - name: Run Scan
- run: |
+  - uses: actions/checkout@v1
+  - name: Prepare variables
+    id: vars
+    shell: bash
+    run: |
+     echo "##[set-output name=branch;]$(echo${GITHUB_REF#refs/heads/})"
+     echo "::set-output name=sha_short::$(git rev-parse HEAD)"
+  - name: Prepare Mixeway docker image
+    run: |
+     docker pull mixeway/scanner:latest
+  - name: Run Scan
+    run: |
      docker run \
      -e OSS_USERNAME={{ secrets.OSS_USERNAME}} \ 
      -e OSS_KEY={{ secrets.OSS_KEY}} \
-      -e MIXEWAY_URL=https://hub.mixeway.io \
-      -e MIXEWAY_KEY=${{ secrets.MIXEWAY_API_KEY }} \
-      -e MIXEWAY_PROJECT_ID=${{ secrets.MIXEWAY_PROJECT_ID }} \
-      -e MIXEWAY_PROJECT_NAME=xPrinZz_lab_secure_app \
-      mixeway/scanner:latest mixeway-scanner static-test && \
-    git add . && \
-    git commit -m "Github actions" && \
-    git push origin master
+     -e MIXEWAY_URL=https://hub.mixeway.io \
+     -e MIXEWAY_KEY=${{ secrets.MIXEWAY_API_KEY }} \
+     -e MIXEWAY_PROJECT_ID=${{ secrets.MIXEWAY_PROJECT_ID }} \
+     -e MIXEWAY_PROJECT_NAME=xPrinZz_lab_secure_app \
+     mixeway/scanner:latest mixeway-scanner static-test && \
+     git add . && \
+     git commit -m "Github actions" && \
+     git push origin master
