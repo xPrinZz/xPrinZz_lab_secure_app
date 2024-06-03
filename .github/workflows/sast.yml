@@ -1,30 +1,42 @@
 name: Perform Mixeway Scan
-
+on: [push]
 jobs:
- mixeway-scan:
-  name: Mixeway Scanning
-  runs-on: ubuntu-latest
-  steps:
-   - uses: actions/checkout@v1
-   - name: Prepare variables
-     id: vars
-     shell: bash
-     run: |
-      echo "##[set-output name=branch;]$(echo${GITHUB_REF#refs/heads/})"
-      echo "::set-output name=sha_short::$(git rev-parse HEAD)"
-   - name: Prepare Mixeway docker image
-     run: |
-      docker pull mixeway/scanner:latest
-   - name: Run Scan
-     run: |
-      docker run \
-      -e OSS_USERNAME={{ secrets.OSS_USERNAME}} \ 
-      -e OSS_KEY={{ secrets.OSS_KEY}} \
-      -e MIXEWAY_URL=https://hub.mixeway.io \
-      -e MIXEWAY_KEY=${{ secrets.MIXEWAY_API_KEY }} \
-      -e MIXEWAY_PROJECT_ID=${{ secrets.MIXEWAY_PROJECT_ID }} \
-      -e MIXEWAY_PROJECT_NAME=xPrinZz_lab_secure_app \
-      mixeway/scanner:latest mixeway-scanner static-test && \
-      git add . && \
-      git commit -m "Github actions" && \
-      git push origin master
+  mixeway-scan:
+    name: Mixeway Scanning
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Prepare variables
+        id: vars
+        shell: bash
+        run: |
+          echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+          echo "::set-output name=sha_short::$(git rev-parse HEAD)"
+      - name: Prepare Mixeway docker image
+        run: |
+          docker pull mixeway/scanner:latest
+      - name: Run Scan
+        env:
+          MIXEWAY_KEY: ${{ secrets.MIXEWAY_API_KEY }}
+          SONATYPE_USER: ${{ secrets.OSS_USERNAME }}
+          SONATYPE_KEY: ${{ secrets.OSS_KEY }}
+        run: |
+          docker run \
+            -e "OSS_USERNAME=$SONATYPE_USER" \
+            -e "OSS_KEY=$SONATYPE_KEY" \
+            -e "MIXEWAY_URL=https://hub.mixeway.io" \
+            -e "MIXEWAY_KEY=$MIXEWAY_KEY" \
+            -e "MIXEWAY_PROJECT_ID=${{ secrets.MIXEWAY_PROJECT_ID }}" \
+            -e "MODE=STANDALONE" \
+            -e "MIXEWAY_PROJECT_NAME=xPrinZz_lab_secure_app" \
+            -e "COMMIT_ID=${{ steps.vars.outputs.sha_short }}" \
+            -e "BRANCH=${{ steps.vars.outputs.branch }}" \
+            -v "$GITHUB_WORKSPACE:/opt/sources" \
+            mixeway/scanner:latest
+      - name: Check Report
+        shell: bash
+        run: |
+          if [[ $(jq length "$GITHUB_WORKSPACE/mixeway_sast_report.json") -ne 0 ]]; then 
+            false
+          else 
+            true
